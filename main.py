@@ -187,7 +187,7 @@ def fetch(url):
             for u in urls:
                 if re.search(r'''community/''', u) != None:
                     # 需屏蔽规则
-                    if re.search(r'''community/(?:.+/)?(o\d|props|round|trends|photos2|view|jiedu)/''', u) != None:
+                    if re.search(r'''community/(?:.+/)?(o\d|props|round|trends|photos2|view|jiedu|\?kw=)/''', u) != None:
                         pass
                     else:
                         insert_r = url_insert(u)
