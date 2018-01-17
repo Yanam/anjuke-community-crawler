@@ -85,6 +85,8 @@ def url_insert(url):
         result = True
     except mysql.IntegrityError:
         result = None
+    except Exception as e:
+        result = None
 
     c.close()
     DB_CONN.commit()
@@ -100,6 +102,8 @@ def url_update(url, status):
                   (status, url,))
         result = True
     except mysql.IntegrityError:
+        result = None
+    except Exception as e:
         result = None
 
     c.close()
