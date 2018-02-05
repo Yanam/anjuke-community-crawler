@@ -137,3 +137,61 @@ def read_file(path):
     r = fp.read()
     fp.close()
     return r
+
+def mid(content, start, end=None, clear=None):
+    """
+    字符串截取函数
+
+    @param content      内容
+    @param start        开始字符串   以括号"("开始且结尾的则按照正则表达式执行
+    @param end          结束字符串   以括号"("开始且结尾的则按照正则表达式执行
+    @param clear        清理
+    @return string      截取之后的内容
+
+    """
+    if len(content) == 0 or len(start) == 0: return ''
+    # start
+    if start[0] == '(' and start[-1] == ')':
+        start = re.search(start, content, re.I)
+        if start == None:
+            return ''
+        else:
+            start = start.group()
+
+    # end
+    if end and end[0] == '(' and end[-1] == ')':
+        end = re.search(end, content, re.I)
+        if end == None:
+            end = ''
+        else:
+            end = end.group()
+
+    # find start
+    start_pos = content.find(start)
+    if start_pos == -1 or end == '': return ''
+    # substr
+    if end == None:
+        content = content[start_pos:]
+    else:
+        start_len = len(start)
+        end_pos = content[start_pos + start_len:].find(end)
+        if end_pos == -1:
+            return ''
+        else:
+            content = content[start_pos + start_len: end_pos + start_pos + start_len]
+
+    # clear
+    if isinstance(clear, list) or isinstance(clear, tuple):
+        for rule in clear:
+            if rule[0] == '(' and rule[-1] == ')':
+                content = re.sub(rule, '', content, re.I | re.S)
+            else:
+                content = content.replace(rule, '')
+    elif clear != None:
+        if clear[0] == '(' and clear[-1] == ')':
+            content = re.sub(clear, '', content, re.I | re.S)
+        else:
+            content = content.replace(clear, '')
+
+    return content
+
