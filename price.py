@@ -198,7 +198,7 @@ def fetch(url):
                 xiaoqu_name = d('div.detail-main div.infomain a.infotit').text()
                 city = re.sub(r'^.+://([^\.]+)(.+)?$', r'\1', url)
                 area = 0
-                price = re.sub(r'[^\d]', r'', d('div.house-info p.cjinfo').eq(0).text())
+                price = re.sub(r'[^\d\.]', r'', d('div.house-info p.cjinfo').eq(0).text())
                 huxing = d('h1.house-tit').text().split(' ')[1]
                 qianyue = d('div.house-info p.cjinfo').eq(1).text()
 
@@ -225,11 +225,11 @@ def fetch(url):
                 for ele in d('ul.yizucontent').items():
                     fang_url = ele.find('li').eq(0).find('a').attr('href')
                     fang_id = re.sub(r'^.+/(\d+)\.html(?:.+)?$', r'\1', fang_url)
-                    area = re.sub(r'[^\d]', r'', ele.find('li').eq(1).text())
+                    area = re.sub(r'[^\d\.]', r'', ele.find('li').eq(1).text())
                     city = re.sub(r'^.+://([^\.]+)(.+)?$', r'\1', fang_url)
                     zhuangxiu = ele.find('li').eq(2).text()
                     qianyue = ele.find('li').eq(3).text()
-                    price = re.sub(r'[^\d]', r'', ele.find('li').eq(4).text())
+                    price = re.sub(r'[^\d\.]', r'', ele.find('li').eq(4).text())
 
                     ele_data = {
                         "fang_id": fang_id,
