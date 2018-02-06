@@ -24,7 +24,7 @@ DB_USER = str(LazyFW.config('DB', 'USER'))
 DB_PASS = str(LazyFW.config('DB', 'PASS'))
 DB_NAME = str(LazyFW.config('DB', 'NAME'))
 DB_PORT = int(LazyFW.config('DB', 'PORT'))
-FTQUEUE = Queue()
+FTQUEUE = Queue(maxsize=-1)
 
 # 浏览器里保存的cookies
 COOKIES = LazyFW.read_file(LazyFW.ABS_PATH + '/cookies-5i5j.txt')
@@ -82,6 +82,7 @@ CREATE TABLE IF NOT EXISTS `prices` (
 def url_insert(url):
     DB_CONN = get_conn()
     c = DB_CONN.cursor()
+    url = url.rstrip('/')
     try:
         c.execute(r'''INSERT INTO `price_urls` (`url`) VALUES(%s);''', (url,))
         result = True
@@ -99,6 +100,7 @@ def url_insert(url):
 def url_update(url, status):
     DB_CONN = get_conn()
     c = DB_CONN.cursor()
+    url = url.rstrip('/')
     try:
         c.execute(r'''UPDATE `price_urls` SET `status`=%s WHERE `url`=%s;''',
                   (status, url,))
@@ -253,15 +255,16 @@ def fetch(url):
             num = 0
 
             for u in urls:
-                if re.search(r'''5i5j.com/(xiaoqu|leased)/''', u) != None:
+                if re.search(r'''^https\://([^\.]+)\.5i5j.com/(xiaoqu|leased)/''', u) != None:
                     # 需屏蔽规则
-                    if re.search(r'''5i5j.com/(xiaoqu|leased)/(?:.+/)?(o1|o5|r2)/''',
+                    if re.search(r'''5i5j.com/(xiaoqu|leased)/(?:.+/)?(o\d|r\d)/''',
                                  u) != None:
                         pass
                     else:
                         insert_r = url_insert(u)
                         if insert_r:
-                            FTQUEUE.put_nowait(u)
+                            if FTQUEUE.full() == False:
+                                FTQUEUE.put_nowait(u)
                             num += 1
 
             # 输出添加URL信息
@@ -301,6 +304,7 @@ def worker(queue):
 
         except Exception as e:
             LazyFW.log('''TaskError(%s)''' % (e,))
+            raise
 
 
 def main():
@@ -326,7 +330,8 @@ def main():
     c = DB_CONN.cursor()
     c.execute(r'''SELECT `url` FROM `price_urls` where `status`=0;''')
     for row in c.fetchall():
-        FTQUEUE.put_nowait(row[0])
+        if FTQUEUE.full() == False:
+            FTQUEUE.put_nowait(row[0])
 
     c.close()
     DB_CONN.commit()
