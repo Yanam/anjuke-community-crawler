@@ -257,7 +257,7 @@ def fetch(url):
             for u in urls:
                 if re.search(r'''^https\://([^\.]+)\.5i5j.com/(xiaoqu|leased)/''', u) != None:
                     # 需屏蔽规则
-                    if re.search(r'''5i5j.com/(xiaoqu|leased)/(?:.+/)?(o\d|r\d)/''',
+                    if re.search(r'''5i5j\.com/(xiaoqu|leased)/(?:.+)?((r|o|a|p)[0-9]{1,2}|b[0-9]+e[0-9]+)''',
                                  u) != None:
                         pass
                     else:
@@ -277,7 +277,6 @@ def fetch(url):
     except Exception as e:
         LazyFW.log("Error: %s" % (e,))
         url_update(url, 2)
-        raise
         return False
 
     return True
@@ -304,7 +303,6 @@ def worker(queue):
 
         except Exception as e:
             LazyFW.log('''TaskError(%s)''' % (e,))
-            raise
 
 
 def main():
