@@ -255,6 +255,8 @@ def fetch(url):
             num = 0
 
             for u in urls:
+                # https://nj.5i5j.com/leased/danfengjie/0000n14
+                u = re.sub(r'/0{4}(n\d+)', r'\1', u)
                 if re.search(r'''^https\://([^\.]+)\.5i5j.com/(xiaoqu|leased)/''', u) != None:
                     # 需屏蔽规则
                     if re.search(r'''5i5j\.com/(xiaoqu|leased)/(?:.+)?((r|o|a|p)[0-9]{1,2}|b[0-9]+e[0-9]+)''',
