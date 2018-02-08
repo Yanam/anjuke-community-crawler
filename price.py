@@ -305,24 +305,25 @@ def worker(queue):
 
         except Exception as e:
             LazyFW.log('''TaskError(%s)''' % (e,))
+            raise
 
 
 def main():
     global FTQUEUE
     create_db()
-    fetch(r'https://sh.5i5j.com/xiaoqu/')
-    fetch(r'https://bj.5i5j.com/xiaoqu/')
-    fetch(r'https://hz.5i5j.com/xiaoqu/')
-    fetch(r'https://sz.5i5j.com/xiaoqu/')
-    fetch(r'https://wh.5i5j.com/xiaoqu/')
-    fetch(r'https://wx.5i5j.com/xiaoqu/')
-    fetch(r'https://cd.5i5j.com/xiaoqu/')
-    fetch(r'https://cs.5i5j.com/xiaoqu/')
-    fetch(r'https://nj.5i5j.com/xiaoqu/')
-    fetch(r'https://nn.5i5j.com/xiaoqu/')
-    fetch(r'https://tj.5i5j.com/xiaoqu/')
-    fetch(r'https://ty.5i5j.com/xiaoqu/')
-    fetch(r'https://zz.5i5j.com/xiaoqu/')
+    fetch(r'https://sh.5i5j.com/xiaoqu')
+    fetch(r'https://bj.5i5j.com/xiaoqu')
+    fetch(r'https://hz.5i5j.com/xiaoqu')
+    fetch(r'https://sz.5i5j.com/xiaoqu')
+    fetch(r'https://wh.5i5j.com/xiaoqu')
+    fetch(r'https://wx.5i5j.com/xiaoqu')
+    fetch(r'https://cd.5i5j.com/xiaoqu')
+    fetch(r'https://cs.5i5j.com/xiaoqu')
+    fetch(r'https://nj.5i5j.com/xiaoqu')
+    fetch(r'https://nn.5i5j.com/xiaoqu')
+    fetch(r'https://tj.5i5j.com/xiaoqu')
+    fetch(r'https://ty.5i5j.com/xiaoqu')
+    fetch(r'https://zz.5i5j.com/xiaoqu')
 
     # 再次查询出数据
     DB_CONN = get_conn()
